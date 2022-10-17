@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Formulario</title>
+</head>
+<body onload="cargarDatos();">
+    
+    <div class="parent">
+
+        <div class="child1"></div>
+
+        <div class="child2">
+            <div class=" imagenHTML">
+
+                <img src="img/banner.jpg"/>
+            
+                </div>
+            
+                <br/>
+                <h3>Formulario de captura de datos</h3>
+                <table style="margin-left: 10px;">
+                    <tr>
+                        <th>Matricula</th>
+                        <td> <input type = "text" id= "matricula"/> </td>
+                    </tr>
+            
+                    <tr>
+                        <th>Nombre</th>
+                        <td> <input type = "text" id= "nombre"/> </td>
+                    </tr>
+            
+                    <tr>
+                        <th>Apellido</th>
+                        <td> <input type = "text" id= "apellido"/> </td>
+                    </tr>
+
+                    <tr>
+                        <th>Sexo</th>
+                        <td> <select id= "sexo"> 
+                            <option value="M" >Masculino</option>
+                            <option value="F" >Femenino</option>
+                        </select> </td>
+                    </tr>
+            
+                    <tr>
+                        <th>Carerra</th>
+                        <td> <input type = "text" id= "carrera"/> </td>
+                    </tr>
+            
+                    <tr>
+                        <th>Color</th>
+                        <td> <input type = "text" id= "color"/> </td>
+                    </tr>
+            
+                </table>
+                <br/>
+                
+                <button type = "button" onclick="guardarDatos();"><i class="fa-regular fa-floppy-disk"></i></button><br/><br/>
+            
+                <fieldset>
+                    <legend>Datos Agregados </legend>
+                    <div id="tblDatos">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Matricula</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Carrera</th>
+                                    <th>Sexo</th>
+                                    <th>Color</th>
+                                </tr>
+                            </thead>
+                            <tbody id= "tbDatos"> <!--Las filas agregadas se mostraran en el tbody-->
+                        
+                            </tbody>
+                        </table>
+                    </div >
+                </fieldset>
+        </div>
+
+        <div class="child3"></div>
+
+    </div>
+
+    <script> 
+        var DATOS = []; /*Esto significa que es un arreglo*/
+
+        function guardarDatos(){
+
+            dest = document.getElementById('tbDatos')
+            dest.innerHTML=''/*borra la info actual de la tabla para refrescar correctamente*/
+
+            inps = document.getElementsByTagName('input');/*Busca todos los elementos de un tipo*/
+
+                for(k in inps){
+                    if (inps [k].value == ''){
+                        alert("¡ERROR! El campo [" +inps[k].id + "] esta vacio");
+                        return false;
+                    } 
+                }
+
+            persona = {}; /*Asi se crea un objeto en JavaScript*/
+
+            persona.matricula = document.getElementById('matricula').value;
+            persona.nombre = document.getElementById('nombre').value;
+            persona.apellido = document.getElementById('apellido').value;
+            persona.carrera = document.getElementById('carrera').value;
+            persona.sexo = document.getElementById('sexo').value;
+            persona.color = document.getElementById('color').value;
+
+            DATOS.push(persona);/*para guardar los datos en el arreglo*/
+
+            localStorage.setItem('datos', JSON.stringify(DATOS));/*Para guardar los datos localmente*/
+
+            mostrarDatos();/*Mostrara los datos del arreglo*/
+
+            for(k in inps){
+                inps [k].value = ''; /*Para limpiar los campos*/
+            }
+        }
+        function cargarDatos(){/*Funcion para cargar los datos guardados en LocalStorage*/
+
+            tmp = localStorage.getItem('datos');/*Buscar los datos*/
+            if(tmp != null){
+                DATOS = JSON.parse(tmp);
+                mostrarDatos();
+            }
+
+        }
+
+
+        function mostrarDatos(){
+            dest = document.getElementById('tbDatos')/*destino de los datos*/
+
+            for(k in DATOS){
+
+                persona = DATOS[k];
+                tr = document.createElement('tr'); /*Se usa para crear cualquier elemento*/
+                
+                for(y in persona) {
+                    td = document.createElement('td');
+                    td.innerHTML = persona[y];
+                    tr.appendChild(td);
+                }
+                dest.appendChild(tr);
+            }
+        }
+
+    </script>
+
+</body>
+</html>
